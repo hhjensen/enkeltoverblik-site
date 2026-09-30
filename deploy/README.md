@@ -36,7 +36,7 @@ ls -l /var/www/enkeltoverblik-site/current/index.html
 
 1. Backup: `sudo cp -a /etc/nginx/sites-available/<fil> /root/nginx-<fil>-$(date +%F)`.
 2. Erstat `location`-delen for `enkeltoverblik.dk www.enkeltoverblik.dk` med
-   `root`/`location`-blokkene i `nginx-enkeltoverblik-site.conf.example`.
+   `root`/`location`-blokkene i `nginx-enkeltoverblik-site.conf` (via `nginx-cutover.sh`).
    Behold TLS-linjerne. Rør ikke andre hosts (`*.enkeltoverblik.dk`, `admin.`, `mad.`).
 3. `sudo nginx -t && sudo systemctl reload nginx`.
 
