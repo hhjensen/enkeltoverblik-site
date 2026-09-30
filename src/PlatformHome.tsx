@@ -1,29 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { APP_VERSION, FEATURE_GROUPS, VERSION_HISTORY } from './version'
+import { content, inline, type Showcase } from './content'
+import { APP_VERSION, VERSION_HISTORY } from './version'
 import './PlatformHome.css'
 
-const CONTACT_EMAIL = 'henrik@vores-it.dk'
-const DEMO_URL = 'https://demo.enkeltoverblik.dk'
-const CONTACT_HREF = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-  'Enkelt Overblik til vores fællesskab',
-)}`
-
-const SITES = [
-  { href: DEMO_URL, label: 'demo.enkeltoverblik.dk', note: 'Prøv selv' },
-  {
-    href: 'https://bakkefaldet.enkeltoverblik.dk',
-    label: 'bakkefaldet.enkeltoverblik.dk',
-    note: 'Bofællesskabet Bakkefaldet',
-  },
-] as const
-
-const NAV = [
-  { href: '#funktioner', label: 'Funktioner' },
-  { href: '#madtilmelding', label: 'Madtilmelding' },
-  { href: '#roller', label: 'Roller' },
-  { href: '#priser', label: 'Priser' },
-  { href: '#faq', label: 'Spørgsmål' },
-] as const
+const { settings } = content
 
 const DAYS = [
   { day: 'Man', date: '6. okt', dish: 'Kylling i karry med ris', veg: true, gf: true, count: 42 },
@@ -250,8 +230,6 @@ function ThemesMock() {
     </div>
   )
 }
-
-/* ---------- Page content ---------- */
 
 /* ---------- Portal mockups ---------- */
 
@@ -538,206 +516,100 @@ function NotifyMock() {
   )
 }
 
+/* ---------- Page content (texts live in content/*.md) ---------- */
 
-/* ---------- Page content ---------- */
-
-type Showcase = {
-  id: string
-  icon: string
-  kicker: string
-  title: string
-  text: string
-  bullets: readonly string[]
-  mock: ReactNode
+// Maps "illustration:" in a content file to its drawn mockup.
+// Keep in sync with ILLUSTRATIONS in scripts/check-content.ts.
+const ILLUSTRATIONS: Record<string, () => ReactNode> = {
+  opslagstavle: () => (
+    <BrowserFrame url="solbakken.enkeltoverblik.dk/tavle">
+      <BoardMock />
+    </BrowserFrame>
+  ),
+  chat: () => (
+    <PhoneFrame>
+      <ChatMock />
+    </PhoneFrame>
+  ),
+  aarshjul: () => (
+    <BrowserFrame url="…/kalender">
+      <YearWheelMock />
+    </BrowserFrame>
+  ),
+  booking: () => (
+    <BrowserFrame url="…/booking">
+      <BookingMock />
+    </BrowserFrame>
+  ),
+  filer: () => (
+    <BrowserFrame url="…/filer">
+      <FilesMock />
+    </BrowserFrame>
+  ),
+  billeder: () => (
+    <BrowserFrame url="…/billeder">
+      <PhotosMock />
+    </BrowserFrame>
+  ),
+  naboer: () => (
+    <BrowserFrame url="…/huse">
+      <HousesMock />
+    </BrowserFrame>
+  ),
+  grupper: () => (
+    <BrowserFrame url="…/grupper">
+      <GroupsMock />
+    </BrowserFrame>
+  ),
+  notifikationer: () => (
+    <PhoneFrame>
+      <NotifyMock />
+    </PhoneFrame>
+  ),
+  menu: () => (
+    <BrowserFrame url="solbakken.enkeltoverblik.dk">
+      <WeekMenuMock />
+    </BrowserFrame>
+  ),
+  tilmelding: () => (
+    <PhoneFrame>
+      <SignupMock />
+    </PhoneFrame>
+  ),
+  madhold: () => (
+    <BrowserFrame url="…/madhold">
+      <MenuEditorMock />
+    </BrowserFrame>
+  ),
+  raavarer: () => (
+    <BrowserFrame url="…/bestil-varer">
+      <RawMaterialMock />
+    </BrowserFrame>
+  ),
+  koekken: () => (
+    <BrowserFrame url="…/koekken">
+      <KitchenMock />
+    </BrowserFrame>
+  ),
 }
 
-const PORTAL_SHOWCASES: Showcase[] = [
-  {
-    id: 'opslagstavle',
-    icon: '📌',
-    kicker: 'Opslagstavle',
-    title: 'Fællesskabets fælles opslagstavle',
-    text: 'Del nyt, billeder og beskeder med hele bebyggelsen. Nævn en nabo med @, reagér med emoji og svar i kommentarer. Vigtige opslag kan markeres og fastgøres, så ingen overser dem.',
-    bullets: ['Vigtige og fastgjorte opslag', '@-omtaler, reaktioner og kommentarer', 'Automatiske fødselsdagshilsner'],
-    mock: (
-      <BrowserFrame url="solbakken.enkeltoverblik.dk/tavle">
-        <BoardMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'chat',
-    icon: '💬',
-    kicker: 'Chat',
-    title: 'Snak med naboen — uden at dele telefonnummer',
-    text: 'Skriv direkte til en nabo eller opret en gruppesamtale til udvalget, festen eller legepladsen. Vedhæft billeder og filer, og slå lyden fra i tråde, du ikke behøver følge tæt.',
-    bullets: ['Direkte beskeder og gruppesamtaler', 'Billeder og filer i chatten', 'Slå lyd fra pr. samtale'],
-    mock: (
-      <PhoneFrame>
-        <ChatMock />
-      </PhoneFrame>
-    ),
-  },
-  {
-    id: 'aarshjul',
-    icon: '📅',
-    kicker: 'Årshjul',
-    title: 'Alle fællesdatoer — direkte i jeres kalender',
-    text: 'Fællesmøder, arbejdsweekender og fester samles i årshjulet. Hver beboer kan abonnere, så datoerne automatisk dukker op i telefonens kalender og holdes opdateret.',
-    bullets: ['Kommende og tidligere begivenheder', 'Sted, tidspunkt og beskrivelse', 'Levende kalenderabonnement'],
-    mock: (
-      <BrowserFrame url="…/kalender">
-        <YearWheelMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'booking',
-    icon: '🔑',
-    kicker: 'Booking',
-    title: 'Book fælleshuset på to minutter',
-    text: 'Se hvornår fælleshus, gæsteværelse eller trailer er ledig, vælg tid og formål, og acceptér husreglerne. Systemet forhindrer dobbeltbookinger, og dine bookinger kan ligge i din egen kalender.',
-    bullets: ['Flere ressourcer med egne regler', 'Ingen dobbeltbookinger', 'Kalenderlink til egne bookinger'],
-    mock: (
-      <BrowserFrame url="…/booking">
-        <BookingMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'filer',
-    icon: '🗂️',
-    kicker: 'Filer',
-    title: 'Referater og vedtægter, der er til at finde',
-    text: 'Et fælles dokumentarkiv med mapper, ikoner og links. Nogle mapper kan være kun for admin, og slettede filer ligger i papirkurven, så intet forsvinder ved et uheld.',
-    bullets: ['Mapper i flere niveauer', 'Kun-admin-mapper og uploadrettigheder', 'Papirkurv med gendannelse'],
-    mock: (
-      <BrowserFrame url="…/filer">
-        <FilesMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'billeder',
-    icon: '📷',
-    kicker: 'Billeder',
-    title: 'Fællesskabets fotoalbum',
-    text: 'Saml billederne fra sommerfesten, arbejdsdagen og juletræet i fælles albums. Alle kan kigge med, og dem med uploadret kan lægge nye billeder op.',
-    bullets: ['Albums med forsidebillede', 'Galleri og fuldskærmsvisning', 'Styr hvem der kan uploade'],
-    mock: (
-      <BrowserFrame url="…/billeder">
-        <PhotosMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'naboer',
-    icon: '🏡',
-    kicker: 'Huse & naboer',
-    title: 'Hvem bor egentlig i hus 14?',
-    text: 'En levende beboeroversigt med huse, navne og profiler — også på kort. Perfekt til nye beboere og til alle os, der aldrig helt lærte navnene på børnene.',
-    bullets: ['Beboere grupperet pr. hus', 'Profiler med billede', 'Kortvisning'],
-    mock: (
-      <BrowserFrame url="…/huse">
-        <HousesMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'grupper',
-    icon: '🌱',
-    kicker: 'Grupper & udvalg',
-    title: 'Plads til havegruppen, festudvalget og bestyrelsen',
-    text: 'Grupper har deres egne opslag og filer og kan være åbne eller lukkede. Udvalg har medlemmer med titler, en præsentation og egne mapper.',
-    bullets: ['Åbne og lukkede grupper', 'Udvalg med roller og egne mapper', 'Gruppeopslag vises også på tavlen'],
-    mock: (
-      <BrowserFrame url="…/grupper">
-        <GroupsMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'notifikationer',
-    icon: '🔔',
-    kicker: 'Notifikationer',
-    title: 'Vid besked — uden at blive druknet',
-    text: 'Hver beboer vælger selv, hvad de vil have besked om: chat, nye opslag, omtaler eller madtilmelding. Som pop-up på telefonen, med lyd eller helt stille.',
-    bullets: ['Push-beskeder på mobil og computer', 'Personlige indstillinger', 'Kan lægges på hjemmeskærmen som en app'],
-    mock: (
-      <PhoneFrame>
-        <NotifyMock />
-      </PhoneFrame>
-    ),
-  },
-]
+for (const s of [...content.features.items, ...content.meals.items]) {
+  if (!ILLUSTRATIONS[s.illustration]) {
+    throw new Error(
+      `content: ukendt illustration "${s.illustration}" (${s.kicker}). Mulige: ${Object.keys(ILLUSTRATIONS).join(', ')}`,
+    )
+  }
+}
 
-const MEALS_SHOWCASES: Showcase[] = [
-  {
-    id: 'menu',
-    icon: '🍲',
-    kicker: 'Ugens menu',
-    title: 'Alle kan se, hvad der er til aftensmad',
-    text: 'Menuen ligger åbent — også uden login. Dage uden fællesspisning skjules, deadline står tydeligt, og vegetar og glutenfri er markeret pr. ret.',
-    bullets: ['Mobil, tablet og storskærm', 'Del link direkte til ugen'],
-    mock: (
-      <BrowserFrame url="solbakken.enkeltoverblik.dk">
-        <WeekMenuMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'tilmelding',
-    icon: '🙋',
-    kicker: 'Tilmelding',
-    title: 'Tilmeld hele husstanden på ti sekunder',
-    text: 'Tæl voksne, børn og små børn op og ned, markér kosthensyn pr. person og lad en standard-tilmelding klare de faste uger.',
-    bullets: ['Standard-tilmelding', 'Påmindelse før deadline'],
-    mock: (
-      <PhoneFrame>
-        <SignupMock />
-      </PhoneFrame>
-    ),
-  },
-  {
-    id: 'madhold',
-    icon: '👩‍🍳',
-    kicker: 'Madholdet',
-    title: 'Menu og deadline på få minutter',
-    text: 'Madholdet skriver retterne, svarer på vegetar- og glutenfri-muligheder og sætter deadline — og kan stadig rette tilmeldinger bagefter.',
-    bullets: ['«Ikke mad denne dag»', 'Ret efter deadline'],
-    mock: (
-      <BrowserFrame url="…/madhold">
-        <MenuEditorMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'varer',
-    icon: '🧺',
-    kicker: 'Råvarer',
-    title: 'Indkøbslisten skriver næsten sig selv',
-    text: 'Ugeskema pr. dag, leverandør og kategori. Bestilleren får en færdig liste på mail, og varer krydses af som leveret.',
-    bullets: ['Mail til bestiller', 'Leveret-status'],
-    mock: (
-      <BrowserFrame url="…/bestil-varer">
-        <RawMaterialMock />
-      </BrowserFrame>
-    ),
-  },
-  {
-    id: 'koekken',
-    icon: '🍽️',
-    kicker: 'Køkken & regnskab',
-    title: 'Det rigtige antal tallerkener',
-    text: 'Køkkenoversigten viser spisende pr. dag og kosthensyn — klar til print. Madregnskabet sendes automatisk, når ugen er slut.',
-    bullets: ['Printvenlig køkkenoversigt', 'Automatisk madregnskab'],
-    mock: (
-      <BrowserFrame url="…/koekken">
-        <KitchenMock />
-      </BrowserFrame>
-    ),
-  },
-]
+/** Replaces a {placeholder} in a text field, keeping it a separate text node. */
+function fill(text: string, placeholder: string, value: string): ReactNode[] {
+  return text.split(placeholder).flatMap((part, i) => (i ? [value, part] : [part])).filter(Boolean)
+}
+
+/** Renders a text field that may contain inline Markdown (*kursiv*, **fed**, links). */
+function Md({ as: Tag = 'span', text, className }: { as?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'b' | 'strong' | 'small' | 'summary'; text: string; className?: string }) {
+  return <Tag className={className} dangerouslySetInnerHTML={{ __html: inline(text) }} />
+}
 
 function ShowcaseList({ items }: { items: Showcase[] }) {
   return (
@@ -748,100 +620,23 @@ function ShowcaseList({ items }: { items: Showcase[] }) {
             <p className="ph-kicker">
               <span aria-hidden="true">{s.icon}</span> {s.kicker}
             </p>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
+            <Md as="h3" text={s.title} />
+            <Md as="p" text={s.text} />
             <ul className="ph-checks">
               {s.bullets.map((b) => (
-                <li key={b}>{b}</li>
+                <li key={b} dangerouslySetInnerHTML={{ __html: inline(b) }} />
               ))}
             </ul>
           </div>
-          <div className="ph-showcase-art">{s.mock}</div>
+          <div className="ph-showcase-art">{ILLUSTRATIONS[s.illustration]()}</div>
         </article>
       ))}
     </div>
   )
 }
 
-const PORTAL_ROLES = [
-  {
-    icon: '🙂',
-    title: 'Beboer',
-    items: ['Opslag, kommentarer og reaktioner', 'Chat med naboer og grupper', 'Book fælleshus og ressourcer', 'Se årshjul, filer, billeder og naboer', 'Egne notifikationer og kalenderlinks'],
-  },
-  {
-    icon: '🗂️',
-    title: 'Admin i fællesskabet',
-    items: ['Invitér og administrér beboere', 'Opret huse, udvalg og ressourcer', 'Fællesdatoer i årshjulet', 'Styr filer, mapper og rettigheder', 'Slå moduler til og fra'],
-  },
-  {
-    icon: '📋',
-    title: 'Kun opslagstavle',
-    items: ['Til fx udlejere, vicevært eller kommende beboere', 'Læser og følger med på tavlen', 'Ingen adgang til resten'],
-  },
-] as const
-
-const ROLE_ICONS: Record<string, string> = {
-  'For alle (uden login)': '👀',
-  'For huset': '🏡',
-  'For madhold': '👩‍🍳',
-  'For admin': '🗂️',
-  'Bestiller og madregnskab': '🧾',
-}
-
-const PLANS = [
-  {
-    name: 'Pilot',
-    tagline: 'Prøv det med jeres fællesskab',
-    price: 'Gratis i opstarten',
-    features: ['Egen adresse på enkeltoverblik.dk', 'Hjælp til opsætning af huse og beboere', 'Hele portalen', 'Direkte kontakt til udvikleren'],
-    cta: 'Start en pilot',
-  },
-  {
-    name: 'Fællesskab',
-    tagline: 'Til bofællesskaber i drift',
-    price: 'Pris efter antal huse',
-    features: ['Opslagstavle, chat og grupper', 'Årshjul, booking og filer', 'Billeder og beboeroversigt', 'Push-notifikationer', 'Madtilmelding som tilvalg'],
-    cta: 'Få et tilbud',
-    featured: true,
-  },
-  {
-    name: 'Forening',
-    tagline: 'Større fællesskaber og netværk',
-    price: 'Efter aftale',
-    features: ['Flere fællesskaber', 'Eget domæne og branding', 'Hjælp til flytning af data', 'Prioriteret support'],
-    cta: 'Kontakt os',
-  },
-] as const
-
-const FAQ = [
-  {
-    q: 'Hvordan logger beboerne ind?',
-    a: 'Med deres e-mail. De får et login-link tilsendt — ingen adgangskoder at huske. Kun inviterede beboere kan komme ind.',
-  },
-  {
-    q: 'Skal vi bruge alle funktionerne?',
-    a: 'Nej. Admin slår de moduler til, I har brug for, og bestemmer rækkefølgen i menuen. Madtilmelding er et tilvalg.',
-  },
-  {
-    q: 'Virker det på telefonen?',
-    a: 'Ja. Enkelt Overblik er lavet mobil-først og kan lægges på hjemmeskærmen som en app — også med pop-up-beskeder på iPhone.',
-  },
-  {
-    q: 'Kan vi erstatte Facebook-gruppen og mailinglisten?',
-    a: 'Det er netop tanken: opslag, chat, datoer og dokumenter samlet ét sted, som kun jeres fællesskab har adgang til — uden reklamer.',
-  },
-  {
-    q: 'Hvor ligger vores data?',
-    a: 'Hvert fællesskab er holdt adskilt fra de andre, og data bliver ikke delt eller solgt. Der er ingen reklamer eller sporing.',
-  },
-  {
-    q: 'Hvordan kommer vi i gang?',
-    a: 'Skriv til os. Vi opretter jeres fællesskab på en egen adresse, lægger huse og beboere ind sammen med jer og sender invitationerne.',
-  },
-] as const
-
 export function PlatformHome() {
+  const { hero, steps, features, meals, roles, platform, pricing, sites, questions, final, footer } = content
   const [menuOpen, setMenuOpen] = useState(false)
   // Legacy /om redirects to #versioner; keep that history visible on arrival.
   const [versionsOpen, setVersionsOpen] = useState(
@@ -860,19 +655,16 @@ export function PlatformHome() {
   }, [])
 
   useEffect(() => {
-    document.title = 'Enkelt Overblik — hele fællesskabet samlet ét sted'
+    document.title = settings.pageTitle
     const desc = document.querySelector('meta[name="description"]')
-    if (desc) {
-      desc.setAttribute(
-        'content',
-        'Enkelt Overblik er portalen til bofællesskaber: opslagstavle, chat, årshjul, booking, filer, billeder, naboer og madtilmelding — samlet ét sted.',
-      )
-    }
+    if (desc) desc.setAttribute('content', settings.pageDescription)
     const robots = document.querySelector('meta[name="robots"]')
     if (robots) robots.setAttribute('content', 'index, follow')
     const googlebot = document.querySelector('meta[name="googlebot"]')
     if (googlebot) googlebot.setAttribute('content', 'index, follow')
   }, [])
+
+  const firstMeal = meals.items[0]
 
   return (
     <div className="platform-home">
@@ -892,13 +684,13 @@ export function PlatformHome() {
             {menuOpen ? 'Luk' : 'Menu'}
           </button>
           <nav id="ph-nav-links" className={`ph-nav-links${menuOpen ? ' is-open' : ''}`}>
-            {NAV.map((n) => (
+            {settings.nav.map((n) => (
               <a key={n.href} href={n.href} onClick={() => setMenuOpen(false)}>
                 {n.label}
               </a>
             ))}
-            <a className="ph-btn ph-btn-sm" href={DEMO_URL}>
-              Se demo
+            <a className="ph-btn ph-btn-sm" href={settings.demoUrl}>
+              {settings.navButton}
             </a>
           </nav>
         </div>
@@ -908,27 +700,21 @@ export function PlatformHome() {
         <section className="ph-hero">
           <div className="ph-wrap ph-hero-grid">
             <div>
-              <p className="ph-kicker">Portalen til bofællesskaber</p>
-              <h1>
-                Hele fællesskabet — <em>ét</em> sted
-              </h1>
-              <p className="ph-lead">
-                Opslagstavle, chat, årshjul, booking af fælleshuset, dokumenter,
-                billeder, naboer og madtilmelding. Enkelt Overblik erstatter
-                Facebook-gruppen, mailinglisten og sedlerne på køleskabet.
-              </p>
+              <p className="ph-kicker">{hero.kicker}</p>
+              <Md as="h1" text={hero.title} />
+              <Md as="p" className="ph-lead" text={hero.lead} />
               <div className="ph-cta-row">
-                <a className="ph-btn" href={CONTACT_HREF}>
-                  Kom i gang
+                <a className="ph-btn" href={settings.contactHref}>
+                  {hero.button}
                 </a>
-                <a className="ph-btn ph-btn-ghost" href={DEMO_URL}>
-                  Prøv demoen →
+                <a className="ph-btn ph-btn-ghost" href={settings.demoUrl}>
+                  {hero.demoButton}
                 </a>
               </div>
               <ul className="ph-proof">
-                <li>✓ Kun for jeres fællesskab</li>
-                <li>✓ Ingen reklamer</li>
-                <li>✓ Login uden adgangskode</li>
+                {hero.proof.map((x) => (
+                  <li key={x}>{`✓ ${x}`}</li>
+                ))}
               </ul>
             </div>
             <div className="ph-hero-art">
@@ -946,76 +732,64 @@ export function PlatformHome() {
 
         <section className="ph-strip" aria-label="Moduler">
           <div className="ph-wrap ph-module-strip">
-            {[...PORTAL_SHOWCASES, MEALS_SHOWCASES[0]].map((s) => (
-              <a key={s.id} href={s.id === 'menu' ? '#madtilmelding' : `#funktion-${s.id}`}>
+            {features.items.map((s) => (
+              <a key={s.id} href={`#funktion-${s.id}`}>
                 <span aria-hidden="true">{s.icon}</span>
-                {s.id === 'menu' ? 'Madtilmelding' : s.kicker}
+                {s.kicker}
               </a>
             ))}
+            {firstMeal ? (
+              <a href="#madtilmelding">
+                <span aria-hidden="true">{firstMeal.icon}</span>
+                Madtilmelding
+              </a>
+            ) : null}
           </div>
         </section>
 
         <section id="saadan" className="ph-section">
           <div className="ph-wrap">
-            <p className="ph-kicker">Sådan kommer I i gang</p>
-            <h2>Klar på under en uge</h2>
+            <p className="ph-kicker">{steps.kicker}</p>
+            <Md as="h2" text={steps.title} />
             <ol className="ph-steps">
-              <li>
-                <span className="ph-step-n">1</span>
-                <h3>Vi opretter jer</h3>
-                <p>Jeres egen adresse, farver og de moduler, I vil bruge.</p>
-              </li>
-              <li>
-                <span className="ph-step-n">2</span>
-                <h3>Huse og beboere</h3>
-                <p>Vi lægger huse ind sammen med jer — admin inviterer beboerne.</p>
-              </li>
-              <li>
-                <span className="ph-step-n">3</span>
-                <h3>Beboerne logger ind</h3>
-                <p>Et link på mail, og så er de inde. Læg den på hjemmeskærmen.</p>
-              </li>
-              <li>
-                <span className="ph-step-n">4</span>
-                <h3>Fællesskabet flytter ind</h3>
-                <p>Første opslag, første booking, første fællesspisning.</p>
-              </li>
+              {steps.items.map((x, i) => (
+                <li key={x.title}>
+                  <span className="ph-step-n">{i + 1}</span>
+                  <Md as="h3" text={x.title} />
+                  <Md as="p" text={x.text} />
+                </li>
+              ))}
             </ol>
           </div>
         </section>
 
         <section id="funktioner" className="ph-section ph-section-tint">
           <div className="ph-wrap">
-            <p className="ph-kicker">Funktioner</p>
-            <h2>Alt det, et fællesskab har brug for</h2>
-            <p className="ph-section-lead">
-              Bygget sammen med et rigtigt bofællesskab — og formet af hverdagen der.
-            </p>
-            <ShowcaseList items={PORTAL_SHOWCASES} />
+            <p className="ph-kicker">{features.kicker}</p>
+            <Md as="h2" text={features.title} />
+            <Md as="p" className="ph-section-lead" text={features.lead} />
+            <ShowcaseList items={features.items} />
           </div>
         </section>
 
         <section id="madtilmelding" className="ph-section ph-section-meals">
           <div className="ph-wrap">
-            <p className="ph-kicker">Tilvalg · Madtilmelding</p>
-            <h2>Fællesspisning uden sedler på køleskabet</h2>
-            <p className="ph-section-lead">
-              Slå Madtilmelding til, og få menu, tilmelding, madhold, råvarebestilling,
-              køkkenoversigt og madregnskab — tæt koblet til resten af portalen.
-            </p>
-            <ShowcaseList items={MEALS_SHOWCASES} />
+            <p className="ph-kicker">{meals.kicker}</p>
+            <Md as="h2" text={meals.title} />
+            <Md as="p" className="ph-section-lead" text={meals.lead} />
+            <ShowcaseList items={meals.items} />
             <div className="ph-meals-roles">
-              {FEATURE_GROUPS.map((group) => (
+              {meals.roles.map((group) => (
                 <details key={group.title} className="ph-role">
                   <summary>
                     <span className="ph-role-icon" aria-hidden="true">
-                      {ROLE_ICONS[group.title] ?? '✨'}
+                      {group.icon}
                     </span>
                     <b>{group.title}</b>
                   </summary>
                   <ul>
                     {group.items.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li key={item} dangerouslySetInnerHTML={{ __html: inline(item) }} />
                     ))}
                   </ul>
                 </details>
@@ -1026,10 +800,10 @@ export function PlatformHome() {
 
         <section id="roller" className="ph-section">
           <div className="ph-wrap">
-            <p className="ph-kicker">Roller</p>
-            <h2>Den rigtige adgang til de rigtige mennesker</h2>
+            <p className="ph-kicker">{roles.kicker}</p>
+            <Md as="h2" text={roles.title} />
             <div className="ph-roles">
-              {PORTAL_ROLES.map((r) => (
+              {roles.items.map((r) => (
                 <article key={r.title} className="ph-role">
                   <span className="ph-role-icon" aria-hidden="true">
                     {r.icon}
@@ -1037,7 +811,7 @@ export function PlatformHome() {
                   <h3>{r.title}</h3>
                   <ul>
                     {r.items.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li key={item} dangerouslySetInnerHTML={{ __html: inline(item) }} />
                     ))}
                   </ul>
                 </article>
@@ -1045,9 +819,9 @@ export function PlatformHome() {
             </div>
             <div className="ph-showcase ph-showcase-compact">
               <div className="ph-showcase-text">
-                <p className="ph-kicker">🎨 Til alle aldre</p>
-                <h3>Let at læse — også for bedstemor</h3>
-                <p>Lys eller mørk tilstand, klassisk eller kartotek, og stor tekst med ét tryk.</p>
+                <p className="ph-kicker">{roles.themeKicker}</p>
+                <Md as="h3" text={roles.themeTitle} />
+                <Md as="p" text={roles.themeText} />
               </div>
               <div className="ph-showcase-art">
                 <ThemesMock />
@@ -1059,51 +833,39 @@ export function PlatformHome() {
         <section className="ph-section ph-section-dark">
           <div className="ph-wrap ph-platform">
             <div>
-              <p className="ph-kicker">Platformen</p>
-              <h2>Én portal — moduler efter behov</h2>
-              <p>
-                Hvert fællesskab får sin egen adresse og er holdt helt adskilt fra alle
-                andre. Admin vælger, hvilke moduler der er slået til, og i hvilken
-                rækkefølge de står i menuen.
-              </p>
+              <p className="ph-kicker">{platform.kicker}</p>
+              <Md as="h2" text={platform.title} />
+              <Md as="p" text={platform.text} />
             </div>
             <div className="ph-modules">
-              <div className="ph-module ph-module-on">
-                <b>🏘️ Portalen</b>
-                <span>Opslagstavle · Chat · Årshjul · Booking · Filer · Billeder · Huse & naboer · Grupper & udvalg</span>
-              </div>
-              <div className="ph-module ph-module-on">
-                <b>🍲 Madtilmelding</b>
-                <span>Menu · Tilmelding · Madhold · Råvarer · Køkken · Madregnskab</span>
-              </div>
-              <div className="ph-module ph-module-soon">
-                <b>🔎 Søgning på tværs</b>
-                <span>På vej</span>
-              </div>
+              {platform.modules.map((m) => (
+                <div key={m.title} className={`ph-module ${m.soon ? 'ph-module-soon' : 'ph-module-on'}`}>
+                  <b>{m.title}</b>
+                  <span>{m.text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="priser" className="ph-section">
           <div className="ph-wrap">
-            <p className="ph-kicker">Priser</p>
-            <h2>Enkel pris til jeres fællesskab</h2>
-            <p className="ph-section-lead">
-              Ingen binding i piloten. Skriv til os, så finder vi den rigtige løsning.
-            </p>
+            <p className="ph-kicker">{pricing.kicker}</p>
+            <Md as="h2" text={pricing.title} />
+            <Md as="p" className="ph-section-lead" text={pricing.lead} />
             <div className="ph-plans">
-              {PLANS.map((p) => (
-                <article key={p.name} className={`ph-plan${'featured' in p ? ' is-featured' : ''}`}>
-                  {'featured' in p ? <span className="ph-plan-badge">Mest valgt</span> : null}
+              {pricing.plans.map((p) => (
+                <article key={p.name} className={`ph-plan${p.featured ? ' is-featured' : ''}`}>
+                  {p.featured ? <span className="ph-plan-badge">{pricing.badge}</span> : null}
                   <h3>{p.name}</h3>
                   <p className="ph-plan-tag">{p.tagline}</p>
                   <p className="ph-plan-price">{p.price}</p>
                   <ul className="ph-checks">
                     {p.features.map((f) => (
-                      <li key={f}>{f}</li>
+                      <li key={f} dangerouslySetInnerHTML={{ __html: inline(f) }} />
                     ))}
                   </ul>
-                  <a className={`ph-btn${'featured' in p ? '' : ' ph-btn-ghost'}`} href={CONTACT_HREF}>
+                  <a className={`ph-btn${p.featured ? '' : ' ph-btn-ghost'}`} href={settings.contactHref}>
                     {p.cta}
                   </a>
                 </article>
@@ -1114,14 +876,14 @@ export function PlatformHome() {
 
         <section className="ph-section ph-section-tint">
           <div className="ph-wrap">
-            <p className="ph-kicker">I brug</p>
-            <h2>Se det i virkeligheden</h2>
+            <p className="ph-kicker">{sites.kicker}</p>
+            <Md as="h2" text={sites.title} />
             <div className="ph-sites">
-              {SITES.map((site) => (
+              {sites.items.map((site) => (
                 <a key={site.href} href={site.href} className="ph-site">
                   <small>{site.note}</small>
                   <strong>{site.label}</strong>
-                  <span>Besøg →</span>
+                  <span>{sites.linkText}</span>
                 </a>
               ))}
             </div>
@@ -1131,14 +893,14 @@ export function PlatformHome() {
         <section id="faq" className="ph-section">
           <div className="ph-wrap ph-faq-wrap">
             <div>
-              <p className="ph-kicker">Spørgsmål</p>
-              <h2>Godt at vide</h2>
+              <p className="ph-kicker">{questions.kicker}</p>
+              <Md as="h2" text={questions.title} />
             </div>
             <div className="ph-faq">
-              {FAQ.map((f) => (
+              {questions.items.map((f) => (
                 <details key={f.q}>
                   <summary>{f.q}</summary>
-                  <p>{f.a}</p>
+                  <Md as="p" text={f.a} />
                 </details>
               ))}
             </div>
@@ -1147,14 +909,14 @@ export function PlatformHome() {
 
         <section className="ph-final">
           <div className="ph-wrap ph-final-inner">
-            <h2>Klar til at samle fællesskabet?</h2>
-            <p>Fortæl os om jeres fællesskab — så viser vi, hvordan det kan se ud hos jer.</p>
+            <Md as="h2" text={final.title} />
+            <Md as="p" text={final.text} />
             <div className="ph-cta-row">
-              <a className="ph-btn ph-btn-light" href={CONTACT_HREF}>
-                Skriv til {CONTACT_EMAIL}
+              <a className="ph-btn ph-btn-light" href={settings.contactHref}>
+                {fill(final.button, '{email}', settings.email)}
               </a>
-              <a className="ph-btn ph-btn-ghost-light" href={DEMO_URL}>
-                Prøv demoen
+              <a className="ph-btn ph-btn-ghost-light" href={settings.demoUrl}>
+                {final.demoButton}
               </a>
             </div>
           </div>
@@ -1169,20 +931,20 @@ export function PlatformHome() {
                 <span className="ph-brand-mark">EO</span>
                 Enkelt Overblik
               </a>
-              <p>Portalen til bofællesskaber — med madtilmelding som tilvalg.</p>
+              <Md as="p" text={footer.tagline} />
             </div>
             <div>
-              <strong>Produkt</strong>
-              {NAV.map((n) => (
+              <strong>{footer.productHeading}</strong>
+              {settings.nav.map((n) => (
                 <a key={n.href} href={n.href}>
                   {n.label}
                 </a>
               ))}
             </div>
             <div>
-              <strong>Kontakt</strong>
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-              <a href={DEMO_URL}>demo.enkeltoverblik.dk</a>
+              <strong>{footer.contactHeading}</strong>
+              <a href={`mailto:${settings.email}`}>{settings.email}</a>
+              <a href={settings.demoUrl}>{settings.demoUrl.replace(/^https?:\/\//, '')}</a>
             </div>
           </div>
           <details
@@ -1191,7 +953,7 @@ export function PlatformHome() {
             open={versionsOpen}
             onToggle={(e) => setVersionsOpen(e.currentTarget.open)}
           >
-            <summary>Madtilmelding version {APP_VERSION} · se versionshistorik</summary>
+            <summary>{fill(footer.versionsLink, '{version}', APP_VERSION)}</summary>
             <ol>
               {VERSION_HISTORY.map((entry) => (
                 <li key={entry.version}>
