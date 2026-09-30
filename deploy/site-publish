@@ -1,0 +1,17 @@
+#!/bin/bash
+# Installeres på serveren som /usr/local/bin/site-publish (ejes af deploy-brugeren).
+# Pakker en release ud i releases/<id> og skifter symlinket "current" atomisk.
+# Rollback: site-rollback <id>  (eller: ln -sfn releases/<id> current).
+set -euo pipefail
+ROOT=/var/www/enkeltoverblik-site
+ID="${1:?release id}"; TGZ="${2:?tarball}"
+[[ "$ID" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{7}$ ]] || { echo "invalid id" >&2; exit 1; }
+[[ "$TGZ" == "/tmp/site-$ID.tgz" ]] || { echo "invalid tarball" >&2; exit 1; }
+mkdir -p "$ROOT/releases/$ID"
+tar -xzf "$TGZ" -C "$ROOT/releases/$ID"
+rm -f "$TGZ"
+[[ -f "$ROOT/releases/$ID/index.html" ]] || { echo "index.html missing" >&2; exit 1; }
+ln -sfn "releases/$ID" "$ROOT/current.tmp" && mv -Tf "$ROOT/current.tmp" "$ROOT/current"
+# Behold de 10 nyeste releases.
+ls -1dt "$ROOT"/releases/*/ | tail -n +11 | xargs -r rm -rf
+echo "published $ID"

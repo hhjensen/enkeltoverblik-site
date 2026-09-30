@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Madtilmelding">
+  <rect width="180" height="180" rx="40" fill="#1f5c45"/>
+  <circle cx="90" cy="78" r="42" fill="none" stroke="#f4fff8" stroke-width="10"/>
+  <path d="M48 118c12 22 36 34 42 34s30-12 42-34" fill="none" stroke="#f4fff8" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="90" cy="78" r="10" fill="#c45c26"/>
+</svg>

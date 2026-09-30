@@ -1,0 +1,42 @@
+name: Deploy
+
+# Uploader det byggede site til serveren ved push til main.
+# Slået fra indtil repo-variablen DEPLOY_ENABLED sættes til "true"
+# (først når nginx-omlægningen i deploy/README.md er udført).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Upload release
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SSH_TARGET: ${{ vars.DEPLOY_TARGET }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          RELEASE="$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_SHA::7}"
+          tar -C dist -czf site.tgz .
+          scp -i ~/.ssh/id_deploy site.tgz "$SSH_TARGET:/tmp/site-$RELEASE.tgz"
+          ssh -i ~/.ssh/id_deploy "$SSH_TARGET" "site-publish $RELEASE /tmp/site-$RELEASE.tgz"
+      - name: Smoke
+        run: curl -fsS https://enkeltoverblik.dk/ | grep -q '<div id="root">'
