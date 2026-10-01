@@ -817,16 +817,18 @@ export function PlatformHome() {
                 </article>
               ))}
             </div>
-            <div className="ph-showcase ph-showcase-compact">
-              <div className="ph-showcase-text">
-                <p className="ph-kicker">{roles.themeKicker}</p>
-                <Md as="h3" text={roles.themeTitle} />
-                <Md as="p" text={roles.themeText} />
+            {roles.theme ? (
+              <div className="ph-showcase ph-showcase-compact">
+                <div className="ph-showcase-text">
+                  <p className="ph-kicker">{roles.theme.kicker}</p>
+                  <Md as="h3" text={roles.theme.title} />
+                  <Md as="p" text={roles.theme.text} />
+                </div>
+                <div className="ph-showcase-art">
+                  <ThemesMock />
+                </div>
               </div>
-              <div className="ph-showcase-art">
-                <ThemesMock />
-              </div>
-            </div>
+            ) : null}
           </div>
         </section>
 

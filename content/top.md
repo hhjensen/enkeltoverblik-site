@@ -1,5 +1,5 @@
 ---
-etiket: Portalen til bofællesskaber
+etiket: Portalen til bofællesskaber og foreninger
 # Skriv *ord* for at fremhæve et ord i overskriften.
 overskrift: Hele fællesskabet — *ét* sted
 knap: Kom i gang

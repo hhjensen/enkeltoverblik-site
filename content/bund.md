@@ -5,4 +5,4 @@ kolonne_kontakt: Kontakt
 versioner_link: Madtilmelding version {version} · se versionshistorik
 ---
 
-Portalen til bofællesskaber — med madtilmelding som tilvalg.
+Portalen til bofællesskaber, grundejerforeninger og andelsboligforeninger — med madtilmelding som tilvalg.

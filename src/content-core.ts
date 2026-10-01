@@ -170,9 +170,10 @@ export function loadContent(files: Files) {
   const roles = {
     ...heading(r),
     items: roleList(r),
-    themeKicker: str(r, 'tema_etiket'),
-    themeTitle: str(r, 'tema_overskrift'),
-    themeText: str(r, 'tema_tekst'),
+    // Optional: the theme box is shown only when all three fields are set.
+    theme: r.data.tema_overskrift === undefined
+      ? null
+      : { kicker: str(r, 'tema_etiket'), title: str(r, 'tema_overskrift'), text: str(r, 'tema_tekst') },
   }
 
   const p = doc(files, 'platform.md')

@@ -7,7 +7,7 @@ demo_url: https://demo.enkeltoverblik.dk
 # Fanebladets titel og beskrivelsen, Google og delinger viser.
 side_titel: Enkelt Overblik — hele fællesskabet samlet ét sted
 side_beskrivelse: >-
-  Enkelt Overblik er portalen til bofællesskaber: opslagstavle, chat, årshjul,
+  Enkelt Overblik er portalen til bofællesskaber, grundejer- og andelsboligforeninger: opslagstavle, chat, årshjul,
   booking, filer, billeder, naboer og madtilmelding — samlet ét sted.
 
 # Menuen øverst og i bunden. "link" peger på en sektion på siden.

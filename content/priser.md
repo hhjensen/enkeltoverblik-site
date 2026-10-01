@@ -14,7 +14,7 @@ planer:
       - Direkte kontakt til udvikleren
     knap: Start en pilot
   - navn: Fællesskab
-    undertitel: Til bofællesskaber i drift
+    undertitel: Til fællesskaber og foreninger i drift
     pris: Pris efter antal huse
     punkter:
       - Opslagstavle, chat og grupper

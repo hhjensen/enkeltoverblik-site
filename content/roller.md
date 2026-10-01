@@ -25,8 +25,10 @@ roller:
       - Læser og følger med på tavlen
       - Ingen adgang til resten
 
-# Boksen under rollerne (med illustration af temaerne).
-tema_etiket: "🎨 Til alle aldre"
-tema_overskrift: Let at læse — også for bedstemor
-tema_tekst: Lys eller mørk tilstand, klassisk eller kartotek, og stor tekst med ét tryk.
+# Boks under rollerne med illustration af temaerne (lys/mørk, stor tekst).
+# Skjult indtil temaerne er tilgængelige i portalen. Fjern # foran de tre
+# linjer for at vise den igen.
+# tema_etiket: "🎨 Til alle aldre"
+# tema_overskrift: Let at læse — også for bedstemor
+# tema_tekst: Lys eller mørk tilstand, klassisk eller kartotek, og stor tekst med ét tryk.
 ---
