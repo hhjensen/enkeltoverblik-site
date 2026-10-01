@@ -20,7 +20,6 @@ roller:
       - "E-mail: menu klar og/eller påmindelse før deadline"
       - "Push: vælg hvilke pop-up-beskeder enheden skal have"
       - "Kalenderlink til egne tilmeldinger"
-      - "Vælg lys eller mørk, Klassisk eller Kartotek, og Normal eller stor tekst"
   - titel: "For madhold"
     ikon: "👩‍🍳"
     punkter:

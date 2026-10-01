@@ -8,8 +8,7 @@ moduler:
   - titel: "🍲 Madtilmelding"
     tekst: Menu · Tilmelding · Madhold · Råvarer · Køkken · Madregnskab
   - titel: "🔎 Søgning på tværs"
-    tekst: På vej
-    status: på-vej
+    tekst: Søg på tværs af hele portalen
 ---
 
 Hvert fællesskab får sin egen adresse og er holdt helt adskilt fra alle andre. Admin vælger, hvilke moduler der er slået til, og i hvilken rækkefølge de står i menuen.
