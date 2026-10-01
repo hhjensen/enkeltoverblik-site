@@ -1,0 +1,13 @@
+{
+  "name": "enkeltoverblik-site-contact",
+  "private": true,
+  "type": "module",
+  "description": "Contact form endpoint for enkeltoverblik.dk (POST /api/kontakt).",
+  "scripts": {
+    "start": "node contact-server.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "nodemailer": "^7.0.0"
+  }
+}

@@ -131,7 +131,7 @@ export function loadContent(files: Files) {
   const email = str(s, 'kontakt_email')
   const settings = {
     email,
-    contactHref: `mailto:${email}?subject=${encodeURIComponent(str(s, 'mail_emne'))}`,
+    contactHref: '#kontakt',
     demoUrl: str(s, 'demo_url'),
     pageTitle: str(s, 'side_titel'),
     pageDescription: str(s, 'side_beskrivelse'),
@@ -220,8 +220,24 @@ export function loadContent(files: Files) {
   const final = {
     title: str(a, 'overskrift'),
     text: body(a),
-    button: str(a, 'knap'),
     demoButton: str(a, 'knap_demo'),
+  }
+
+  const c = doc(files, 'kontakt.md')
+  const contact = {
+    labels: {
+      name: str(c, 'felt_navn'),
+      email: str(c, 'felt_email'),
+      community: str(c, 'felt_faellesskab'),
+      households: str(c, 'felt_husstande'),
+      message: str(c, 'felt_besked'),
+    },
+    button: str(c, 'knap'),
+    sending: str(c, 'knap_sender'),
+    requiredNote: str(c, 'obligatorisk_note'),
+    thanksTitle: str(c, 'tak_overskrift'),
+    thanksText: str(c, 'tak_tekst'),
+    errorText: str(c, 'fejl_tekst'),
   }
 
   const fo = doc(files, 'bund.md')
@@ -230,9 +246,10 @@ export function loadContent(files: Files) {
     productHeading: str(fo, 'kolonne_produkt'),
     contactHeading: str(fo, 'kolonne_kontakt'),
     versionsLink: str(fo, 'versioner_link'),
+    contactLink: str(fo, 'kontakt_link'),
   }
 
-  return { settings, hero, steps, features, meals, roles, platform, pricing, sites, questions, final, footer }
+  return { settings, hero, steps, features, meals, roles, platform, pricing, sites, questions, final, contact, footer }
 }
 
 export type Content = ReturnType<typeof loadContent>
