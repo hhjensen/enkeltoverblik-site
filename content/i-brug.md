@@ -6,7 +6,4 @@ steder:
   - note: Prøv selv
     navn: demo.enkeltoverblik.dk
     link: https://demo.enkeltoverblik.dk
-  - note: Bofællesskabet Bakkefaldet
-    navn: bakkefaldet.enkeltoverblik.dk
-    link: https://bakkefaldet.enkeltoverblik.dk
 ---
