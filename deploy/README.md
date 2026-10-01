@@ -12,10 +12,16 @@ Alle trin kræver Henriks godkendelse. Trin 3 er den eneste produktionsændring.
 sudo adduser --system --group --home /var/www/enkeltoverblik-site --shell /bin/bash site-deploy
 sudo install -d -o site-deploy -g site-deploy /var/www/enkeltoverblik-site/releases
 sudo install -o root -g root -m 0755 deploy/site-publish /usr/local/bin/site-publish
+sudo install -o root -g root -m 0755 deploy/site-deploy-gate /usr/local/bin/site-deploy-gate
 ```
 
 Opret et nyt SSH-nøglepar kun til deploy. Den offentlige del i
-`/var/www/enkeltoverblik-site/.ssh/authorized_keys` (ejer site-deploy, 0600).
+`/var/www/enkeltoverblik-site/.ssh/authorized_keys` (ejer site-deploy, 0600), låst
+til `site-deploy-gate`, så nøglen kun kan køre `site-publish <id>` og intet andet:
+
+```
+restrict,command="/usr/local/bin/site-deploy-gate" ssh-ed25519 AAAA… github-deploy enkeltoverblik-site
+```
 I GitHub (Settings → Secrets and variables → Actions):
 
 - secret `DEPLOY_SSH_KEY`: privat nøgle
