@@ -80,10 +80,9 @@ På serveren, i en checkout af repoet på den commit, der skal installeres:
 ```bash
 git clone https://github.com/hhjensen/enkeltoverblik-site /tmp/site && cd /tmp/site && git checkout <commit>
 
-# 1. Hemmeligheder (én gang). SMTP_PASS = samme som madappens besked@enkeltoverblik.dk.
+# 1. Hemmeligheder (én gang): kopierer SMTP fra madappens notify.json uden at vise passwordet.
 # Filen er root-only (0600); systemd læser den som root og giver værdierne til tjenesten.
-sudo install -o root -g root -m 0600 deploy/site-contact.env.example /etc/enkeltoverblik/site-contact.env
-sudo nano /etc/enkeltoverblik/site-contact.env        # udfyld SMTP_PASS
+sudo bash deploy/contact-env-from-notify.sh
 
 # 2. Tjenesten (også ved senere opdateringer af server/)
 sudo bash deploy/install-contact.sh                   # skal ende med contact=ok
