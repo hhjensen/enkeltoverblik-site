@@ -1,0 +1,27 @@
+# /etc/systemd/system/site-contact.service
+# Kontaktformularen på enkeltoverblik.dk (POST /api/kontakt via nginx).
+[Unit]
+Description=enkeltoverblik.dk contact form
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=site-contact
+Group=site-contact
+WorkingDirectory=/opt/enkeltoverblik-site-contact
+EnvironmentFile=/etc/enkeltoverblik/site-contact.env
+ExecStart=/usr/bin/node /opt/enkeltoverblik-site-contact/contact-server.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

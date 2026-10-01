@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { content, inline, type Showcase } from './content'
 import { APP_VERSION, VERSION_HISTORY } from './version'
 import './PlatformHome.css'
@@ -606,6 +606,95 @@ function fill(text: string, placeholder: string, value: string): ReactNode[] {
   return text.split(placeholder).flatMap((part, i) => (i ? [value, part] : [part])).filter(Boolean)
 }
 
+type FormState = 'idle' | 'sending' | 'sent' | 'error'
+
+/** Contact form; posts JSON to /api/kontakt (server/contact-server.mjs). */
+function ContactForm() {
+  const { contact, settings } = content
+  const [state, setState] = useState<FormState>('idle')
+  const [error, setError] = useState('')
+  // Time the form was shown; the server rejects submissions faster than a human.
+  const [started] = useState(() => Date.now())
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const form = new FormData(e.currentTarget)
+    const body = Object.fromEntries([...form.entries()].map(([k, v]) => [k, String(v)]))
+    setState('sending')
+    setError('')
+    try {
+      const res = await fetch('/api/kontakt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...body, startet: started }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+      if (res.ok && data.ok) {
+        setState('sent')
+        return
+      }
+      setError(res.status === 400 && data.error ? data.error : '')
+      setState('error')
+    } catch {
+      setError('')
+      setState('error')
+    }
+  }
+
+  if (state === 'sent') {
+    return (
+      <div className="ph-contact ph-contact-done" role="status">
+        <h3>{contact.thanksTitle}</h3>
+        <p>{contact.thanksText}</p>
+      </div>
+    )
+  }
+
+  const l = contact.labels
+  return (
+    <form className="ph-contact" onSubmit={onSubmit} noValidate={false}>
+      <div className="ph-contact-grid">
+        <label>
+          <span>{l.name} *</span>
+          <input name="navn" required maxLength={100} autoComplete="name" />
+        </label>
+        <label>
+          <span>{l.email} *</span>
+          <input name="email" type="email" required maxLength={200} autoComplete="email" />
+        </label>
+        <label>
+          <span>{l.community} *</span>
+          <input name="faellesskab" required maxLength={150} autoComplete="organization" />
+        </label>
+        <label>
+          <span>{l.households}</span>
+          <input name="husstande" inputMode="numeric" maxLength={20} />
+        </label>
+        <label className="ph-contact-wide">
+          <span>{l.message} *</span>
+          <textarea name="besked" required maxLength={4000} rows={5} />
+        </label>
+        {/* Honeypot: hidden from people, filled in by bots. */}
+        <label className="ph-contact-hp" aria-hidden="true">
+          <span>Website</span>
+          <input name="website" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
+      {state === 'error' ? (
+        <p className="ph-contact-error" role="alert">
+          {error || fill(contact.errorText, '{email}', settings.email)}
+        </p>
+      ) : null}
+      <div className="ph-contact-foot">
+        <small>{contact.requiredNote}</small>
+        <button type="submit" className="ph-btn" disabled={state === 'sending'}>
+          {state === 'sending' ? contact.sending : contact.button}
+        </button>
+      </div>
+    </form>
+  )
+}
+
 /** Renders a text field that may contain inline Markdown (*kursiv*, **fed**, links). */
 function Md({ as: Tag = 'span', text, className }: { as?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'b' | 'strong' | 'small' | 'summary'; text: string; className?: string }) {
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: inline(text) }} />
@@ -909,14 +998,12 @@ export function PlatformHome() {
           </div>
         </section>
 
-        <section className="ph-final">
+        <section id="kontakt" className="ph-final">
           <div className="ph-wrap ph-final-inner">
             <Md as="h2" text={final.title} />
             <Md as="p" text={final.text} />
+            <ContactForm />
             <div className="ph-cta-row">
-              <a className="ph-btn ph-btn-light" href={settings.contactHref}>
-                {fill(final.button, '{email}', settings.email)}
-              </a>
               <a className="ph-btn ph-btn-ghost-light" href={settings.demoUrl}>
                 {final.demoButton}
               </a>
@@ -945,7 +1032,7 @@ export function PlatformHome() {
             </div>
             <div>
               <strong>{footer.contactHeading}</strong>
-              <a href={`mailto:${settings.email}`}>{settings.email}</a>
+              <a href="#kontakt">{footer.contactLink}</a>
               <a href={settings.demoUrl}>{settings.demoUrl.replace(/^https?:\/\//, '')}</a>
             </div>
           </div>

@@ -1594,3 +1594,102 @@
 .ph-showcase-compact {
   margin-top: 4rem;
 }
+
+/* Contact form (in the final CTA) */
+.ph-contact {
+  width: min(100%, 680px);
+  margin-top: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: var(--ph-radius);
+  background: var(--ph-surface);
+  color: var(--ph-ink);
+  box-shadow: var(--ph-shadow);
+  text-align: left;
+}
+.ph-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.ph-contact label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.ph-contact-wide {
+  grid-column: 1 / -1;
+}
+.ph-contact input,
+.ph-contact textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 10px;
+  background: var(--ph-bg);
+  color: var(--ph-ink);
+}
+.ph-contact textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+.ph-contact input:focus-visible,
+.ph-contact textarea:focus-visible,
+.ph-contact button:focus-visible {
+  outline: 3px solid var(--ph-amber);
+  outline-offset: 2px;
+}
+.ph-contact-hp {
+  position: absolute !important;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.ph-contact-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.ph-contact-foot small {
+  color: var(--ph-muted);
+}
+.ph-contact button {
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+.ph-contact button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.ph-final .ph-contact p.ph-contact-error {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--ph-amber-soft);
+  color: var(--ph-ink);
+  font-size: 0.95rem;
+}
+.ph-contact-done {
+  text-align: center;
+}
+.ph-contact-done h3 {
+  margin: 0;
+  font-family: var(--ph-serif);
+}
+.ph-final .ph-contact-done p {
+  margin: 0.5rem 0 0;
+  color: var(--ph-muted);
+  font-size: 1rem;
+}
+@media (max-width: 600px) {
+  .ph-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

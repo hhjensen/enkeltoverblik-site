@@ -1,7 +1,7 @@
 ---
 # Kontakt og links, der bruges flere steder på siden.
+# Bruges kun som reserve, hvis kontaktformularen ikke kan sende.
 kontakt_email: henrik@vores-it.dk
-mail_emne: Enkelt Overblik til vores fællesskab
 demo_url: https://demo.enkeltoverblik.dk
 
 # Fanebladets titel og beskrivelsen, Google og delinger viser.

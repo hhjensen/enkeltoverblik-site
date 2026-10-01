@@ -63,3 +63,34 @@ marketing-grenen i `src/main.tsx`. Behold `/om`-redirecten.
 ls -1t /var/www/enkeltoverblik-site/releases
 sudo -u site-deploy ln -sfn releases/<forrige-id> /var/www/enkeltoverblik-site/current
 ```
+
+## Kontaktformularen (`/api/kontakt`)
+
+Formularen på siden sender til en lille Node-tjeneste (`server/contact-server.mjs`,
+systemd `site-contact`, kun `127.0.0.1:3100`). Den sender fra
+`besked@enkeltoverblik.dk` til `CONTACT_TO` (Svar går til kunden) og en kvittering
+til kunden. Grænser: 3 pr. time pr. IP, `DAILY_LIMIT` pr. døgn, skjult felt og
+minimum-udfyldningstid mod robotter; nginx begrænser derudover til 6/min pr. IP.
+
+**Rækkefølge:** sæt serveren op *før* den side, der har formularen, udrulles. Ellers
+får besøgende fejlbeskeden (med e-mail-reserven).
+
+På serveren, i en checkout af repoet på den commit, der skal installeres:
+
+```bash
+git clone https://github.com/hhjensen/enkeltoverblik-site /tmp/site && cd /tmp/site && git checkout <commit>
+
+# 1. Hemmeligheder (én gang): kopierer SMTP fra madappens notify.json uden at vise passwordet.
+# Filen er root-only (0600); systemd læser den som root og giver værdierne til tjenesten.
+sudo bash deploy/contact-env-from-notify.sh
+
+# 2. Tjenesten (også ved senere opdateringer af server/)
+sudo bash deploy/install-contact.sh                   # skal ende med contact=ok
+
+# 3. nginx (produktionsændring; ruller selv tilbage ved fejl)
+sudo bash deploy/nginx-add-contact.sh                 # skal ende med nginx-contact=ok
+```
+
+Test: send en rigtig henvendelse fra siden efter udrulning; tjek at begge mails kommer.
+Log: `journalctl -u site-contact` (indeholder aldrig beskeder eller adresser).
+Slå formularen fra: `sudo systemctl stop site-contact` (siden viser så fejlbeskeden med e-mail).
