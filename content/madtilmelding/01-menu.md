@@ -8,4 +8,4 @@ punkter:
   - "Del link direkte til ugen"
 ---
 
-Menuen ligger åbent — også uden login. Dage uden fællesspisning skjules, deadline står tydeligt, og vegetar og glutenfri er markeret pr. ret.
+Alle tilmeldte beboere ser ugens menu, så snart de logger ind. Dage uden fællesspisning skjules, deadline står tydeligt, og vegetar og glutenfri er markeret pr. ret.

@@ -10,6 +10,10 @@ Alt over første spørgsmål (som denne tekst) vises ikke.
 
 Med deres e-mail. De får et login-link tilsendt — ingen adgangskoder at huske. Kun inviterede beboere kan komme ind.
 
+## Er det kun for bofællesskaber?
+
+Nej. Enkelt Overblik passer til alle fællesskaber, hvor naboer deler noget: bofællesskaber, grundejerforeninger og andelsboligforeninger. Madtilmelding er et tilvalg for dem, der spiser sammen.
+
 ## Skal vi bruge alle funktionerne?
 
 Nej. Admin slår de moduler til, I har brug for, og bestemmer rækkefølgen i menuen. Madtilmelding er et tilvalg.
