@@ -1,16 +1,32 @@
 #!/bin/bash
-# Installeres på serveren som /usr/local/bin/site-publish (ejes af deploy-brugeren).
+# Installeres på serveren som /usr/local/bin/site-publish (root:root 0755).
 # Pakker en release ud i releases/<id> og skifter symlinket "current" atomisk.
-# Rollback: site-rollback <id>  (eller: ln -sfn releases/<id> current).
+#
+#   site-publish <id>                      pakken (tar.gz) læses fra stdin
+#   site-publish <id> /tmp/site-<id>.tgz   pakken læses fra fil (gammel metode)
+#
+# Rollback: ln -sfn releases/<forrige-id> /var/www/enkeltoverblik-site/current
 set -euo pipefail
 ROOT=/var/www/enkeltoverblik-site
-ID="${1:?release id}"; TGZ="${2:?tarball}"
+MAX_BYTES=$((50 * 1024 * 1024))
+ID="${1:?release id}"
 [[ "$ID" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{7}$ ]] || { echo "invalid id" >&2; exit 1; }
-[[ "$TGZ" == "/tmp/site-$ID.tgz" ]] || { echo "invalid tarball" >&2; exit 1; }
+[[ ! -e "$ROOT/releases/$ID" ]] || { echo "release exists" >&2; exit 1; }
+
+if [[ $# -ge 2 ]]; then
+  TGZ="$2"
+  [[ "$TGZ" == "/tmp/site-$ID.tgz" ]] || { echo "invalid tarball" >&2; exit 1; }
+else
+  TGZ="$(mktemp /tmp/site-upload.XXXXXX)"
+  trap 'rm -f "$TGZ"' EXIT
+  head -c "$((MAX_BYTES + 1))" > "$TGZ"
+  [[ "$(stat -c %s "$TGZ")" -le "$MAX_BYTES" ]] || { echo "tarball too large" >&2; exit 1; }
+fi
+
 mkdir -p "$ROOT/releases/$ID"
-tar -xzf "$TGZ" -C "$ROOT/releases/$ID"
-rm -f "$TGZ"
-[[ -f "$ROOT/releases/$ID/index.html" ]] || { echo "index.html missing" >&2; exit 1; }
+tar -xzf "$TGZ" -C "$ROOT/releases/$ID" --no-same-owner --no-same-permissions
+[[ $# -ge 2 ]] && rm -f "$TGZ"
+[[ -f "$ROOT/releases/$ID/index.html" ]] || { rm -rf "$ROOT/releases/$ID"; echo "index.html missing" >&2; exit 1; }
 ln -sfn "releases/$ID" "$ROOT/current.tmp" && mv -Tf "$ROOT/current.tmp" "$ROOT/current"
 # Behold de 10 nyeste releases.
 ls -1dt "$ROOT"/releases/*/ | tail -n +11 | xargs -r rm -rf

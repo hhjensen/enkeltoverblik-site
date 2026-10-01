@@ -36,7 +36,8 @@ jobs:
           printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           RELEASE="$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_SHA::7}"
           tar -C dist -czf site.tgz .
-          scp -i ~/.ssh/id_deploy site.tgz "$SSH_TARGET:/tmp/site-$RELEASE.tgz"
-          ssh -i ~/.ssh/id_deploy "$SSH_TARGET" "site-publish $RELEASE /tmp/site-$RELEASE.tgz"
+          # The deploy key is locked to site-deploy-gate, which only allows
+          # "site-publish <id>" with the tarball on stdin.
+          ssh -i ~/.ssh/id_deploy "$SSH_TARGET" "site-publish $RELEASE" < site.tgz
       - name: Smoke
         run: curl -fsS https://enkeltoverblik.dk/ | grep -q '<div id="root">'
