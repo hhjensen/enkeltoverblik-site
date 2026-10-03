@@ -1,26 +1,10 @@
 /* Enkelt Overblik — marketing site (enkeltoverblik.dk)
    Tokens live on the root so the blocking script in index.html can set
-   data-theme before first paint. Dark (below) is the existing palette.
-   Light is the same site in warm neutrals. prefers-color-scheme only
-   applies when the visitor has not chosen yet. */
+   data-theme before first paint. Light is the first-visit default.
+   Dark is only the stored choice. */
 :root {
-  color-scheme: dark;
-  background: var(--ph-bg);
-  --ph-bg: #1b1814;
-  --ph-bg-tint: #231f1a;
-  --ph-surface: #2a251f;
-  --ph-ink: #f3ece1;
-  --ph-muted: #b5a998;
-  --ph-line: #3b342b;
-  --ph-green: #5cbf88;
-  --ph-green-soft: #1f3a2a;
-  --ph-amber: #e9a35a;
-  --ph-amber-soft: #3d2c18;
-  --ph-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 12px 32px rgb(0 0 0 / 35%);
-}
-
-:root[data-theme="light"] {
   color-scheme: light;
+  background: var(--ph-bg);
   --ph-bg: #faf6ef;
   --ph-bg-tint: #f2ebdf;
   --ph-surface: #fffdf9;
@@ -34,21 +18,19 @@
   --ph-shadow: 0 1px 2px rgb(60 40 20 / 6%), 0 12px 32px rgb(60 40 20 / 10%);
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-    --ph-bg: #faf6ef;
-    --ph-bg-tint: #f2ebdf;
-    --ph-surface: #fffdf9;
-    --ph-ink: #2a241c;
-    --ph-muted: #6f6558;
-    --ph-line: #e6dccd;
-    --ph-green: #1f6b45;
-    --ph-green-soft: #e3f0e7;
-    --ph-amber: #b86a1c;
-    --ph-amber-soft: #fbead3;
-    --ph-shadow: 0 1px 2px rgb(60 40 20 / 6%), 0 12px 32px rgb(60 40 20 / 10%);
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ph-bg: #1b1814;
+  --ph-bg-tint: #231f1a;
+  --ph-surface: #2a251f;
+  --ph-ink: #f3ece1;
+  --ph-muted: #b5a998;
+  --ph-line: #3b342b;
+  --ph-green: #5cbf88;
+  --ph-green-soft: #1f3a2a;
+  --ph-amber: #e9a35a;
+  --ph-amber-soft: #3d2c18;
+  --ph-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 12px 32px rgb(0 0 0 / 35%);
 }
 
 .platform-home {
