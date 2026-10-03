@@ -1,9 +1,10 @@
 ---
-etiket: I brug
-overskrift: Se det i virkeligheden
-link_tekst: Besøg →
+# Kortet linker til kontaktformularen på siden (#kontakt).
+etiket: Demonstration
+overskrift: Se det hos jer
+link_tekst: Skriv til os →
 steder:
-  - note: Prøv selv
-    navn: demo.enkeltoverblik.dk
-    link: https://demo.enkeltoverblik.dk
+  - note: Vi viser jer portalen
+    navn: Kontakt os for en demonstration
+    link: "#kontakt"
 ---

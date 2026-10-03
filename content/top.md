@@ -3,7 +3,8 @@ etiket: Portalen til bofællesskaber og foreninger
 # Skriv *ord* for at fremhæve et ord i overskriften.
 overskrift: Hele fællesskabet — *ét* sted
 knap: Kom i gang
-knap_demo: Prøv demoen →
+# Linker til kontaktformularen (#kontakt).
+knap_demo: Få en demonstration →
 fordele:
   - Kun for jeres fællesskab
   - Ingen reklamer

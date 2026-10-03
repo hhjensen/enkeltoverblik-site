@@ -14,7 +14,7 @@ rette dem direkte på GitHub: åbn filen, klik på blyanten, ret og klik
 
 | Del af siden | Fil |
 |---|---|
-| Kontakt-e-mail, demo-link, menu, fanebladets titel | `content/indstillinger.md` |
+| Kontakt-e-mail, menu, fanebladets titel | `content/indstillinger.md` |
 | Toppen (overskrift, knapper, ✓-punkter) | `content/top.md` |
 | "Sådan kommer I i gang" | `content/kom-i-gang.md` |
 | Funktioner: overskrift / hver funktion | `content/funktioner.md` / `content/funktioner/*.md` |
@@ -22,7 +22,7 @@ rette dem direkte på GitHub: åbn filen, klik på blyanten, ret og klik
 | Roller og "Til alle aldre" | `content/roller.md` |
 | Platformen (mørk boks) | `content/platform.md` |
 | Priser | `content/priser.md` |
-| "Se det i virkeligheden" | `content/i-brug.md` |
+| "Se det hos jer" | `content/i-brug.md` |
 | Spørgsmål | `content/faq.md` |
 | Afslutning og bunden | `content/afslutning.md`, `content/bund.md` |
 

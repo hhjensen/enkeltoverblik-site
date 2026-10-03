@@ -1,8 +1,7 @@
 ---
 # Kontakt og links, der bruges flere steder på siden.
-# Bruges kun som reserve, hvis kontaktformularen ikke kan sende.
+# E-mailen bruges som reserve, hvis kontaktformularen ikke kan sende, og vises i bunden.
 kontakt_email: henrik@vores-it.dk
-demo_url: https://demo.enkeltoverblik.dk
 
 # Fanebladets titel og beskrivelsen, Google og delinger viser.
 side_titel: Enkelt Overblik — hele fællesskabet samlet ét sted
@@ -22,7 +21,8 @@ menu:
     link: "#priser"
   - tekst: Spørgsmål
     link: "#faq"
-menu_knap: Se demo
+# Knappen i menuen linker til kontaktformularen (#kontakt).
+menu_knap: Få en demo
 ---
 
 Denne fil indeholder ikke synlig brødtekst. Rediger felterne ovenfor.

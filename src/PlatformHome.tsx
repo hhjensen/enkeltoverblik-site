@@ -778,7 +778,7 @@ export function PlatformHome() {
                 {n.label}
               </a>
             ))}
-            <a className="ph-btn ph-btn-sm" href={settings.demoUrl}>
+            <a className="ph-btn ph-btn-sm" href={settings.contactHref}>
               {settings.navButton}
             </a>
           </nav>
@@ -796,7 +796,7 @@ export function PlatformHome() {
                 <a className="ph-btn" href={settings.contactHref}>
                   {hero.button}
                 </a>
-                <a className="ph-btn ph-btn-ghost" href={settings.demoUrl}>
+                <a className="ph-btn ph-btn-ghost" href={settings.contactHref}>
                   {hero.demoButton}
                 </a>
               </div>
@@ -1004,7 +1004,7 @@ export function PlatformHome() {
             <Md as="p" text={final.text} />
             <ContactForm />
             <div className="ph-cta-row">
-              <a className="ph-btn ph-btn-ghost-light" href={settings.demoUrl}>
+              <a className="ph-btn ph-btn-ghost-light" href={settings.contactHref}>
                 {final.demoButton}
               </a>
             </div>
@@ -1032,8 +1032,8 @@ export function PlatformHome() {
             </div>
             <div>
               <strong>{footer.contactHeading}</strong>
-              <a href="#kontakt">{footer.contactLink}</a>
-              <a href={settings.demoUrl}>{settings.demoUrl.replace(/^https?:\/\//, '')}</a>
+              <a href={settings.contactHref}>{footer.contactLink}</a>
+              <a href={`mailto:${settings.email}`}>{settings.email}</a>
             </div>
           </div>
           <details
