@@ -244,7 +244,6 @@ export function loadContent(files: Files) {
     tagline: body(fo),
     productHeading: str(fo, 'kolonne_produkt'),
     contactHeading: str(fo, 'kolonne_kontakt'),
-    versionsLink: str(fo, 'versioner_link'),
     contactLink: str(fo, 'kontakt_link'),
   }
 
