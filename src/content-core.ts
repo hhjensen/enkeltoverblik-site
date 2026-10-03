@@ -132,7 +132,6 @@ export function loadContent(files: Files) {
   const settings = {
     email,
     contactHref: '#kontakt',
-    demoUrl: str(s, 'demo_url'),
     pageTitle: str(s, 'side_titel'),
     pageDescription: str(s, 'side_beskrivelse'),
     nav: objList(s, 'menu').map((n, i) => ({

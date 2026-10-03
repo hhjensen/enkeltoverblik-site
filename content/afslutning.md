@@ -1,6 +1,7 @@
 ---
 overskrift: Klar til at samle fællesskabet?
-knap_demo: Prøv demoen
+# Linker til kontaktformularen (#kontakt).
+knap_demo: Få en demonstration
 ---
 
 Fortæl os om jeres fællesskab — så viser vi, hvordan det kan se ud hos jer.
