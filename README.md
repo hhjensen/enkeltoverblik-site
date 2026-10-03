@@ -40,8 +40,6 @@ udrulningen med en besked som `FEJL I INDHOLD: content/priser.md: feltet
 fanen **Actions**, ret filen og commit igen.
 
 Illustrationerne og layoutet ligger i `src/PlatformHome.tsx` / `.css`.
-Versionshistorikken (`#versioner`) ligger i `src/version.ts` (kopi af
-Madtilmeldings historik pr. 30/9-2026).
 
 ## Lokalt
 

@@ -1,6 +1,5 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { content, inline, type Showcase } from './content'
-import { APP_VERSION, VERSION_HISTORY } from './version'
 import './PlatformHome.css'
 
 const { settings } = content
@@ -727,21 +726,6 @@ function ShowcaseList({ items }: { items: Showcase[] }) {
 export function PlatformHome() {
   const { hero, steps, features, meals, roles, platform, pricing, sites, questions, final, footer } = content
   const [menuOpen, setMenuOpen] = useState(false)
-  // Legacy /om redirects to #versioner; keep that history visible on arrival.
-  const [versionsOpen, setVersionsOpen] = useState(
-    () => window.location.hash === '#versioner',
-  )
-
-  useEffect(() => {
-    const onHash = () => {
-      if (window.location.hash === '#versioner') setVersionsOpen(true)
-    }
-    if (window.location.hash === '#versioner') {
-      document.getElementById('versioner')?.scrollIntoView()
-    }
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
 
   useEffect(() => {
     document.title = settings.pageTitle
@@ -1036,33 +1020,6 @@ export function PlatformHome() {
               <a href={settings.demoUrl}>{settings.demoUrl.replace(/^https?:\/\//, '')}</a>
             </div>
           </div>
-          <details
-            id="versioner"
-            className="ph-versions"
-            open={versionsOpen}
-            onToggle={(e) => setVersionsOpen(e.currentTarget.open)}
-          >
-            <summary>{fill(footer.versionsLink, '{version}', APP_VERSION)}</summary>
-            <ol>
-              {VERSION_HISTORY.map((entry) => (
-                <li key={entry.version}>
-                  <strong>
-                    Version {entry.version}
-                    {entry.version === APP_VERSION ? ' (aktuel)' : ''}
-                  </strong>
-                  <span>
-                    {' '}
-                    · {entry.date} · {entry.title}
-                  </span>
-                  <ul>
-                    {entry.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ol>
-          </details>
         </div>
       </footer>
     </div>

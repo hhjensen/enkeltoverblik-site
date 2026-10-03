@@ -1180,25 +1180,6 @@
     grid-template-columns: 1fr;
   }
 }
-.ph-versions {
-  margin-top: 2.5rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--ph-line);
-}
-.ph-versions summary {
-  cursor: pointer;
-}
-.ph-versions ol {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-  display: grid;
-  gap: 1rem;
-}
-.ph-versions ul {
-  margin: 0.3rem 0 0;
-  padding-left: 1.2rem;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .ph-btn,
