@@ -703,7 +703,7 @@ const THEME_KEY = 'eo-theme'
 type Theme = 'light' | 'dark'
 
 function currentTheme(): Theme {
-  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
 }
 
 function applyTheme(theme: Theme) {
