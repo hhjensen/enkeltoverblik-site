@@ -2,6 +2,19 @@
 <html lang="da">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        var theme = 'dark'
+        try {
+          var stored = localStorage.getItem('eo-theme')
+          if (stored === 'light' || stored === 'dark') theme = stored
+          else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
+        } catch (e) {}
+        var root = document.documentElement
+        root.setAttribute('data-theme', theme)
+        root.style.colorScheme = theme
+      })()
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="color-scheme" content="light dark" />

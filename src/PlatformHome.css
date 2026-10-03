@@ -1,5 +1,26 @@
-/* Enkelt Overblik — marketing site (enkeltoverblik.dk) */
-.platform-home {
+/* Enkelt Overblik — marketing site (enkeltoverblik.dk)
+   Tokens live on the root so the blocking script in index.html can set
+   data-theme before first paint. Dark (below) is the existing palette.
+   Light is the same site in warm neutrals. prefers-color-scheme only
+   applies when the visitor has not chosen yet. */
+:root {
+  color-scheme: dark;
+  background: var(--ph-bg);
+  --ph-bg: #1b1814;
+  --ph-bg-tint: #231f1a;
+  --ph-surface: #2a251f;
+  --ph-ink: #f3ece1;
+  --ph-muted: #b5a998;
+  --ph-line: #3b342b;
+  --ph-green: #5cbf88;
+  --ph-green-soft: #1f3a2a;
+  --ph-amber: #e9a35a;
+  --ph-amber-soft: #3d2c18;
+  --ph-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 12px 32px rgb(0 0 0 / 35%);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
   --ph-bg: #faf6ef;
   --ph-bg-tint: #f2ebdf;
   --ph-surface: #fffdf9;
@@ -10,8 +31,28 @@
   --ph-green-soft: #e3f0e7;
   --ph-amber: #b86a1c;
   --ph-amber-soft: #fbead3;
-  --ph-terracotta: #c4623f;
   --ph-shadow: 0 1px 2px rgb(60 40 20 / 6%), 0 12px 32px rgb(60 40 20 / 10%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --ph-bg: #faf6ef;
+    --ph-bg-tint: #f2ebdf;
+    --ph-surface: #fffdf9;
+    --ph-ink: #2a241c;
+    --ph-muted: #6f6558;
+    --ph-line: #e6dccd;
+    --ph-green: #1f6b45;
+    --ph-green-soft: #e3f0e7;
+    --ph-amber: #b86a1c;
+    --ph-amber-soft: #fbead3;
+    --ph-shadow: 0 1px 2px rgb(60 40 20 / 6%), 0 12px 32px rgb(60 40 20 / 10%);
+  }
+}
+
+.platform-home {
+  --ph-terracotta: #c4623f;
   --ph-radius: 18px;
   --ph-serif: Fraunces, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
 
@@ -23,22 +64,6 @@
   font-size: 1.0625rem;
   line-height: 1.55;
   overflow-x: clip;
-}
-
-@media (prefers-color-scheme: dark) {
-  .platform-home {
-    --ph-bg: #1b1814;
-    --ph-bg-tint: #231f1a;
-    --ph-surface: #2a251f;
-    --ph-ink: #f3ece1;
-    --ph-muted: #b5a998;
-    --ph-line: #3b342b;
-    --ph-green: #5cbf88;
-    --ph-green-soft: #1f3a2a;
-    --ph-amber: #e9a35a;
-    --ph-amber-soft: #3d2c18;
-    --ph-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 12px 32px rgb(0 0 0 / 35%);
-  }
 }
 
 .platform-home *,
@@ -104,7 +129,8 @@
 .ph-btn:focus-visible,
 .platform-home a:focus-visible,
 .platform-home summary:focus-visible,
-.ph-nav-toggle:focus-visible {
+.ph-nav-toggle:focus-visible,
+.ph-theme-switch button:focus-visible {
   outline: 3px solid var(--ph-amber);
   outline-offset: 3px;
 }
@@ -154,10 +180,17 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  min-width: 0;
   font-family: var(--ph-serif);
   font-weight: 600;
   font-size: 1.2rem;
   text-decoration: none;
+}
+.ph-brand-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .ph-brand-mark {
   display: grid;
@@ -170,6 +203,12 @@
   font-family: Outfit, system-ui, sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
+}
+.ph-nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
 }
 .ph-nav-links {
   display: flex;
@@ -186,6 +225,7 @@
 }
 .ph-nav-toggle {
   display: none;
+  flex: none;
   border: 1px solid var(--ph-line);
   background: var(--ph-surface);
   color: var(--ph-ink);
@@ -194,9 +234,48 @@
   font: inherit;
   font-weight: 600;
 }
-@media (max-width: 860px) {
+.ph-theme-switch {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.15rem;
+  border: 1px solid var(--ph-line);
+  border-radius: 999px;
+  background: var(--ph-surface);
+}
+.ph-theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ph-muted);
+  cursor: pointer;
+}
+.ph-theme-switch button[aria-pressed='true'] {
+  background: var(--ph-green-soft);
+  color: var(--ph-green);
+}
+.ph-theme-switch button:hover {
+  color: var(--ph-ink);
+}
+.ph-theme-switch button[aria-pressed='true']:hover {
+  color: var(--ph-green);
+}
+.ph-theme-switch svg {
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+@media (max-width: 940px) {
   .ph-nav-toggle {
     display: inline-block;
+    padding: 0.4rem 0.75rem;
   }
   .ph-nav-links {
     display: none;

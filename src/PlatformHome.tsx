@@ -699,6 +699,54 @@ function Md({ as: Tag = 'span', text, className }: { as?: 'span' | 'p' | 'h1' | 
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: inline(text) }} />
 }
 
+const THEME_KEY = 'eo-theme'
+type Theme = 'light' | 'dark'
+
+function currentTheme(): Theme {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+}
+
+function applyTheme(theme: Theme) {
+  const root = document.documentElement
+  root.setAttribute('data-theme', theme)
+  root.style.colorScheme = theme
+  try {
+    localStorage.setItem(THEME_KEY, theme)
+  } catch {
+    /* Private mode and blocked storage still switch for this visit. */
+  }
+}
+
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z" />
+    </svg>
+  )
+}
+
+function ThemeSwitch({ theme, onChange }: { theme: Theme; onChange: (theme: Theme) => void }) {
+  return (
+    <div className="ph-theme-switch" role="group" aria-label="Farvetema">
+      <button type="button" aria-pressed={theme === 'light'} aria-label="Lys" title="Lys" onClick={() => onChange('light')}>
+        <SunIcon />
+      </button>
+      <button type="button" aria-pressed={theme === 'dark'} aria-label="Mørk" title="Mørk" onClick={() => onChange('dark')}>
+        <MoonIcon />
+      </button>
+    </div>
+  )
+}
+
 function ShowcaseList({ items }: { items: Showcase[] }) {
   return (
     <div className="ph-showcases">
@@ -726,6 +774,12 @@ function ShowcaseList({ items }: { items: Showcase[] }) {
 export function PlatformHome() {
   const { hero, steps, features, meals, roles, platform, pricing, sites, questions, final, footer } = content
   const [menuOpen, setMenuOpen] = useState(false)
+  const [theme, setTheme] = useState<Theme>(() => currentTheme())
+
+  function chooseTheme(next: Theme) {
+    setTheme(next)
+    applyTheme(next)
+  }
 
   useEffect(() => {
     document.title = settings.pageTitle
@@ -745,27 +799,30 @@ export function PlatformHome() {
         <div className="ph-wrap ph-nav-inner">
           <a href="#top" className="ph-brand">
             <span className="ph-brand-mark">EO</span>
-            Enkelt Overblik
+            <span className="ph-brand-name">Enkelt Overblik</span>
           </a>
-          <button
-            type="button"
-            className="ph-nav-toggle"
-            aria-expanded={menuOpen}
-            aria-controls="ph-nav-links"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? 'Luk' : 'Menu'}
-          </button>
-          <nav id="ph-nav-links" className={`ph-nav-links${menuOpen ? ' is-open' : ''}`}>
-            {settings.nav.map((n) => (
-              <a key={n.href} href={n.href} onClick={() => setMenuOpen(false)}>
-                {n.label}
+          <div className="ph-nav-tools">
+            <nav id="ph-nav-links" className={`ph-nav-links${menuOpen ? ' is-open' : ''}`}>
+              {settings.nav.map((n) => (
+                <a key={n.href} href={n.href} onClick={() => setMenuOpen(false)}>
+                  {n.label}
+                </a>
+              ))}
+              <a className="ph-btn ph-btn-sm" href={settings.contactHref}>
+                {settings.navButton}
               </a>
-            ))}
-            <a className="ph-btn ph-btn-sm" href={settings.contactHref}>
-              {settings.navButton}
-            </a>
-          </nav>
+            </nav>
+            <ThemeSwitch theme={theme} onChange={chooseTheme} />
+            <button
+              type="button"
+              className="ph-nav-toggle"
+              aria-expanded={menuOpen}
+              aria-controls="ph-nav-links"
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? 'Luk' : 'Menu'}
+            </button>
+          </div>
         </div>
       </header>
 
